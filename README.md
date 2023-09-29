@@ -13,6 +13,13 @@ Dependencies: none <br>
 Call: capt = getCapt(captSize, moveArm) <br>
 Side Effects: None <br><br>
 
+getRotation: number -> matrix <br>
+purpose: thetaCapt represents the angle in radians that will be used to create a 3x3 matrix that will rotate an object stored as a 3xN matrix when multiplied<br>
+Dependencies: None<br>
+Call: R = getRotation(theta)<br>
+Side Effects: None <br>
+
+
 getTranslation: number number -> matrix <br>
 purpose: Number1 represents the amount to shift in the x direction and Number2 the amount to shift in the y direction. 
          getTranslation uses these numbers to create a 3x3 matrix that will translate an object stored as a 3xN matrix when it 
