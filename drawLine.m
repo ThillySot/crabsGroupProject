@@ -33,7 +33,7 @@ drawline draws a line from point p to point q with myColor color
 % extract the y coordinates
   y=[ p(2) ; q(2) ];
 
-  handle = plot(x,y,myColor)
+  handle = plot(x,y,myColor);
 
   set(handle, "LineWidth", 3);
 
