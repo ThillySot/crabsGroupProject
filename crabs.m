@@ -10,7 +10,7 @@ xCapt = 1200;
 yCapt = 1000;
 thetaCapt = -pi/2;
 sizeCapt = 50;
-moveArm = 'fals'
+moveArm = 'fals';
 
 % Draw the captain and initialize graphics handles
 %*********************************************************
