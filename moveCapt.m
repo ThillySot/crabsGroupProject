@@ -4,11 +4,13 @@ dTheta=pi/6;
 dStep=50;
 moveArm = 'fals';
 
+
 if( cmd == "w" ) %move forward
 xCapt = x + dStep*cos(theta);
 yCapt = y + dStep*sin(theta);
 thetaCapt = theta;
 moveArm = 'fals';
+
 
 elseif ( cmd == "d" ) %turn right
 xCapt = x;
