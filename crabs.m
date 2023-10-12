@@ -4,21 +4,26 @@ function crabs ()
 % Draw the game map and initialize map dimensions.
 
 [mapHeight , mapWidth] = drawMap( "BGImage.png" );
-
 % Initialize captain location, heading and size
 xCapt = 1200;
 yCapt = 1000;
 thetaCapt = -pi/2;
 sizeCapt = 50;
 moveArm = 'fals';
-
 % Draw the captain and initialize graphics handles
 %*********************************************************
 % Put your call to drawCapt() here ..... You must give drawCapt its
 % input and output arguments.
 %*******************************************************
-
 captainGraphics = drawCapt (xCapt, yCapt, thetaCapt, sizeCapt, moveArm);
+
+
+% Inititalize crab location, heading, and size
+xCrab = 1000;
+yCrab = 1100;
+thetaCrab = -pi/2;
+sizeCrab = 100;
+crabGraphics = drawCrabs (xCrab , yCrab , thetaCrab , sizeCrab)
 
 cmd = "null"; % initial command
 
@@ -30,16 +35,34 @@ if( cmd == "w" || cmd == "a" || cmd == "d" || cmd == "e")
 %Captain has moved. Respond.
 % erase old captain
 
-for i=1:length( captainGraphics )
-set( captainGraphics(i), 'Visible', 'off' );
+   for i=1:length( captainGraphics )
+      set( captainGraphics(i), 'Visible', 'off' );
+   endfor
+   % move capt
+   [xCapt, yCapt, thetaCapt, moveArm] = moveCapt(cmd, xCapt, yCapt, thetaCapt, sizeCapt, mapWidth, mapHeight);
 
-endfor
-% move capt
-[xCapt, yCapt, thetaCapt, moveArm] = moveCapt(cmd, xCapt, yCapt, thetaCapt);
+   % draw new capt
+   captainGraphics = drawCapt( xCapt, yCapt, thetaCapt, sizeCapt, moveArm);
 
-% draw new capt
- captainGraphics = drawCapt( xCapt, yCapt, thetaCapt, sizeCapt, moveArm);
+
+
+
+
+   %crab inputs
+   elseif (cmd == "j" || cmd == "l" || cmd == "k" || cmd == "i" || cmd == ",")
+   %erase old crab
+   for (i=1:length(crabGraphics))
+                set(crabGraphics(i), 'Visible','off');
+   endfor
+
+   %move crab
+   [xCrab, yCrab, thetaCrab] = moveCrabs(cmd,xCrab,yCrab,thetaCrab, sizeCrab, mapHeight, mapWidth);
+
+   %draw new crab
+   crabGraphics = drawCrabs (xCrab , yCrab , thetaCrab , sizeCrab)
 endif
 endwhile
+
+close all
 
 endfunction

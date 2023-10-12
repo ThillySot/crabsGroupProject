@@ -1,7 +1,7 @@
-function [xCapt, yCapt, thetaCapt, moveArm] = moveCapt(cmd, x, y, theta)
+function [xCapt, yCapt, thetaCapt, moveArm] = moveCapt(cmd, x, y, theta, size, width, height)
 
 dTheta=pi/6;
-dStep=50;
+dStep=150;
 moveArm = 'fals';
 
 
@@ -10,6 +10,14 @@ xCapt = x + dStep*cos(theta);
 yCapt = y + dStep*sin(theta);
 thetaCapt = theta;
 moveArm = 'fals';
+
+     if (IsOnMap(xCapt, yCapt, width, height, size) )
+       xCapt = xCapt
+       yCapt = yCapt
+     else
+       xCapt = x;
+       yCapt = y;
+     endif
 
 
 elseif ( cmd == "d" ) %turn right

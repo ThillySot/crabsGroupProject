@@ -1,11 +1,12 @@
 
 
-function mapCheck = IsOnMap (x ,y ,width, height)
+function mapCheck = IsOnMap (x ,y ,width, height, size)
+  %size is the buffer
 
-  if(x>0 && x<width && y>0 && y<height)
-    mapCheck=1;
+  if(x>size && x<width-size && y>size && y<height-size)
+    mapCheck=true;
    else
-    mapCheck=0;
+    mapCheck=false;
   endif
 
 
