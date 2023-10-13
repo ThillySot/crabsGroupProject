@@ -48,18 +48,33 @@ if( cmd == "w" || cmd == "a" || cmd == "d" || cmd == "e")
 
 
 
-   %crab inputs
-   elseif (cmd == "j" || cmd == "l" || cmd == "k" || cmd == "i" || cmd == ",")
-   %erase old crab
+##   %crab inputs
+##   elseif (cmd == "j" || cmd == "l" || cmd == "k" || cmd == "i" || cmd == ",")
+##   %erase old crab
+##   for (i=1:length(crabGraphics))
+##                set(crabGraphics(i), 'Visible','off');
+##   endfor
+##
+##   %move crab
+##   [xCrab, yCrab, thetaCrab] = moveCrabs(cmd,xCrab,yCrab,thetaCrab, sizeCrab, mapHeight, mapWidth);
+##
+##   %draw new crab
+##   crabGraphics = drawCrabs (xCrab , yCrab , thetaCrab , sizeCrab)
+
+    %crab movement beta testing
+    if(xCrab != xCapt && yCrab != yCapt)
+    %erase old crab
    for (i=1:length(crabGraphics))
                 set(crabGraphics(i), 'Visible','off');
    endfor
 
    %move crab
-   [xCrab, yCrab, thetaCrab] = moveCrabs(cmd,xCrab,yCrab,thetaCrab, sizeCrab, mapHeight, mapWidth);
+   [xCrab, yCrab, thetaCrab] = crabTracking (xCapt, yCapt, xCrab, yCrab);
 
    %draw new crab
-   crabGraphics = drawCrabs (xCrab , yCrab , thetaCrab , sizeCrab)
+   crabGraphics = drawCrabs (xCrab , yCrab , thetaCrab , sizeCrab);
+   endif
+
 endif
 endwhile
 
