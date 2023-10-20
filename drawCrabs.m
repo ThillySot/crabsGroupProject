@@ -3,10 +3,10 @@ function crabGraphics = drawCrabs (xCrab , yCrab , thetaCrab , sizeCrab)
 crab = getCrabs(sizeCrab);
 
 % TODO : Rotate crab from zero heading to heading thetaCrab
-R = getRotation(thetaCrab)
-crabRotated = R*crab
-T = getTranslation(xCrab, yCrab)
-crab = T*crabRotated
+R = getRotation(thetaCrab);
+crabRotated = R*crab;
+T = getTranslation(xCrab, yCrab);
+crab = T*crabRotated;
 
 % TODO : Shift the crab from (0 , 0) to (xCrab , yCrab)
 % Extract the crab points from the crab matrix crab.

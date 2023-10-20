@@ -1,7 +1,7 @@
 function [xCrab, yCrab, thetaCrab] = moveCrabs(cmd,x,y,theta,size,height,width);
 
-  step = 150
-  dTheta = -pi/6
+  step = 150;
+  dTheta = -pi/6;
 
 
 %move left
@@ -40,8 +40,8 @@ if(cmd == "j")
      thetaCrab = theta;
 
      if (IsOnMap(xTemp, yTemp, width, height, size) )
-       xCrab = xTemp
-       yCrab = yTemp
+       xCrab = xTemp;
+       yCrab = yTemp;
      else
        xCrab = x;
        yCrab = y;
@@ -49,14 +49,14 @@ if(cmd == "j")
 
 %rotate left
    elseif (cmd == "i")
-     xCrab = x
-     yCrab = y
+     xCrab = x;
+     yCrab = y;
      thetaCrab = theta-dTheta;
 
 %rotate right
    elseif (cmd == ",")
-     xCrab = x
-     yCrab = y
+     xCrab = x;
+     yCrab = y;
      thetaCrab = theta+dTheta;
 
    else

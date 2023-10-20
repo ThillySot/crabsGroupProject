@@ -1,4 +1,4 @@
-function [xCapt, yCapt, thetaCapt, moveArm] = moveCapt(cmd, x, y, theta, size, width, height)
+function [xCapt, yCapt, thetaCapt, moveArm] = moveCapt(cmd, x, y, theta, size, width, height);
 
 dTheta=pi/6;
 dStep=150;
@@ -12,8 +12,8 @@ thetaCapt = theta;
 moveArm = 'fals';
 
      if (IsOnMap(xCapt, yCapt, width, height, size) )
-       xCapt = xCapt
-       yCapt = yCapt
+       xCapt = xCapt;
+       yCapt = yCapt;
      else
        xCapt = x;
        yCapt = y;
