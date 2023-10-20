@@ -1,4 +1,4 @@
-function crabs ()
+function crabs (level)
 % Crabs is a kids computer game where a fisherman, called the captain,
 % hunts for a very clever and powerful crab.
 % Draw the game map and initialize map dimensions.
@@ -23,13 +23,30 @@ xCrab = 1000;
 yCrab = 1100;
 thetaCrab = -pi/2;
 sizeCrab = 100;
-crabGraphics = drawCrabs (xCrab , yCrab , thetaCrab , sizeCrab)
+crabGraphics = drawCrabs (xCrab , yCrab , thetaCrab , sizeCrab);
 
-cmd = "null"; % initial command
+%initialize jellyfish
+xJelly = rand*mapWidth;
+yJelly = 0;
+thetaJelly = -pi/2;
+sizeJelly = 25;
+jellyGraphics = drawJelly(xJelly,yJelly,thetaJelly,sizeJelly);
 
-while ( cmd != "Q") % While not quit, read keyboard and respond
+while (1) % While not quit, read keyboard and respond
 
-cmd = kbhit(); % Read the keyboard.
+    % erase old jellyfish
+    for i=1:length(jellyGraphics)
+    delete(jellyGraphics(i));
+    endfor
+    % move jellyfish
+    [xJelly,yJelly,thetaJelly] = moveJelly(level, xJelly, yJelly,thetaJelly, sizeJelly, mapHeight,mapWidth);
+    % draw jellyfish
+    jellyGraphics = drawJelly(xJelly,yJelly,thetaJelly,sizeJelly);
+
+cmd = kbhit(1); % Read the keyboard.
+  if(cmd=='Q')
+    break;
+  endif
 
 if( cmd == "w" || cmd == "a" || cmd == "d" || cmd == "e")
 %Captain has moved. Respond.
@@ -76,6 +93,9 @@ if( cmd == "w" || cmd == "a" || cmd == "d" || cmd == "e")
    endif
 
 endif
+
+fflush(stdout);
+pause(.01);
 endwhile
 
 close all
