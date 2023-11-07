@@ -34,6 +34,17 @@ jellyGraphics = drawJelly(xJelly,yJelly,thetaJelly,sizeJelly);
 
 while (1) % While not quit, read keyboard and respond
 
+    for i = 1:length(crabGraphics)
+            delete(crabGraphics(i));
+    endfor
+
+    [xCrab, yCrab, thetaCrab] = crabTracking(xCapt, yCapt, xCrab, yCrab);
+    crabGraphics = drawCrabs(xCrab, yCrab, thetaCrab, sizeCrab);
+    % Add any other necessary code here
+
+    % Pause for a short duration to control the update rate
+    pause(0.1);
+
     % erase old jellyfish
     for i=1:length(jellyGraphics)
     delete(jellyGraphics(i));
