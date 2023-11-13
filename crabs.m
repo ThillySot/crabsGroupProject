@@ -40,7 +40,6 @@ while (1) % While not quit, read keyboard and respond
 
     [xCrab, yCrab, thetaCrab] = crabTracking(xCapt, yCapt, xCrab, yCrab);
     crabGraphics = drawCrabs(xCrab, yCrab, thetaCrab, sizeCrab);
-    % Add any other necessary code here
 
     % Pause for a short duration to control the update rate
     pause(0.1);

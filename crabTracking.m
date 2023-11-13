@@ -1,5 +1,5 @@
 function [xCrabNew, yCrabNew, thetaCrab] = crabTracking(xCapt, yCapt, xCrab, yCrab)
-    crabStep = 15;
+    crabStep = 20;
 
     thetaCrab = atan2(yCapt - yCrab, xCapt - xCrab);
     xCrabNew = xCrab + crabStep * cos(thetaCrab);
