@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 function [xCrab, yCrab, thetaCrab, crabStep] = crabTracking(xCapt, yCapt, xCrab, yCrab, crabStep, distFromCrab, thetaCapt);
   tempTheta = thetaCapt;
   if (distFromCrab > crabStep)
@@ -23,3 +24,12 @@ function [xCrab, yCrab, thetaCrab, crabStep] = crabTracking(xCapt, yCapt, xCrab,
 
 
 endfunction
+=======
+function [xCrabNew, yCrabNew, thetaCrab] = crabTracking(xCapt, yCapt, xCrab, yCrab)
+    crabStep = 20;
+
+    thetaCrab = atan2(yCapt - yCrab, xCapt - xCrab);
+    xCrabNew = xCrab + crabStep * cos(thetaCrab);
+    yCrabNew = yCrab + crabStep * sin(thetaCrab);
+end
+>>>>>>> a5c2b72f77e7a15589884356103c12dd1e9fca56
