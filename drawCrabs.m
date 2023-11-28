@@ -1,14 +1,15 @@
-function crabGraphics = drawCrabs (xCrab , yCrab , thetaCrab , sizeCrab)
+function [crabGraphics, crab2] = drawCrabs (xCrab , yCrab , thetaCrab , size);
 
-crab = getCrabs(sizeCrab);
+crab = getCrabs(size);
 
 % TODO : Rotate crab from zero heading to heading thetaCrab
-R = getRotation(thetaCrab)
-crabRotated = R*crab
-T = getTranslation(xCrab, yCrab)
-crab = T*crabRotated
+R = getRotation(thetaCrab);
+crabRotated = R*crab;
 
-% TODO : Shift the crab from (0 , 0) to (xCrab , yCrab)
+T = getTranslation(xCrab, yCrab);
+crab = T*crabRotated;
+
+
 % Extract the crab points from the crab matrix crab.
 pt1=crab( : , 1);
 pt2=crab( : , 2);
@@ -23,6 +24,12 @@ pt10=crab( : , 10);
 pt11=crab( : , 11);
 pt12=crab( : , 12);
 
+pt13 = crab( : , 13);
+pt14 = crab( : , 14);
+pt15 = crab( : , 15);
+
+crab2 = [pt13, pt14, pt15];
+
 % Draw the crab and set the return vector of graphics handles.
 crabGraphics(1) = drawLine(pt1 , pt2 , "r");
 crabGraphics(2) = drawLine(pt3 , pt4 , "r");
@@ -36,5 +43,8 @@ crabGraphics(9) = drawLine(pt3 , pt9 , "r");
 crabGraphics(10) = drawLine(pt2 , pt10 , "r");
 crabGraphics(11) = drawLine(pt9 , pt11 , "r");
 crabGraphics(12) = drawLine(pt10 , pt12 , "r");
+
+crabGraphics(13) = drawLine(pt13 , pt14 , "k");
+crabGraphics(14) = drawLine(pt14 , pt15 , "k");
 
 endfunction

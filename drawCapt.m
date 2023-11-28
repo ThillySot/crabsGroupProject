@@ -1,15 +1,9 @@
-function captainGraphics = drawCapt (xCapt , yCapt , thetaCapt , sizeCapt, moveArm)
-% In the future, this function will draw the captain at the given
-% position (xCapt , yCapt) , with heading thetaCapt.
-% For now, it draws the captain at the (0, 0) with 0 heading.
-% This function returns a vector of graphics handles called captainGrapics.
-% The ith vector entry contains the graphics handle of ith line of the captain.
-% Use your code from last week to get the captain matrix
-% for a captain of dimension sizeCapt. Notice that
-% sizeCapt is a parameter passed into drawCapt.
-capt = getCapt(sizeCapt, moveArm);
-% TODO : Rotate captain from zero heading to heading thetaCapt
-% TODO : Shift the captain from (0 , 0) to (xCapt , yCapt)
+function [captainGraphics, capt2, pt16, captHand] = drawCapt (xCapt , yCapt , thetaCapt , sizeCapt, moveArm, bool);
+
+bool = bool;
+
+capt = getCapt(sizeCapt, moveArm, bool);
+captHand = capt( : , 12);
 
 % rotate captain
 R = getRotation(thetaCapt);
@@ -34,6 +28,10 @@ pt11=capt( : , 11);
 pt12=capt( : , 12);
 pt13=capt( : , 13);
 pt14=capt( : , 14);
+pt15=capt( : , 19);
+pt16 = capt( : , 20);
+
+capt2 = [pt13, pt15, pt14];
 % Draw the captain and set the return vector of graphics handles.
 captainGraphics(1) = drawLine(pt1 , pt2 , "k");
 captainGraphics(2) = drawLine(pt2 , pt3 , "k");

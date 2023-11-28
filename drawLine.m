@@ -1,5 +1,5 @@
 
-function handle = drawLine (p, q, myColor)
+function handle = drawLine (p, q, myColor);
 %{
 drawline draws a line from point p to point q with myColor color
 %}
