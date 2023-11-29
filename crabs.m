@@ -18,7 +18,6 @@ spearOff = false;
 [captainGraphics, capt2, pt16, captHand] = drawCapt (xCapt, yCapt, thetaCapt, sizeCapt, moveArm, spearOff);
 
 % Inititalize crab location, heading, and size
-<<<<<<< HEAD
 xCrab = 250;
 yCrab = 250;
 thetaCrab = 0;
@@ -38,12 +37,11 @@ E_is_Pressed = false;
 healthGraphics = drawHealthbar(mapWidth, mapHeight);
 j=0;
 sniperSize = mapWidth/20;
-=======
-xCrab = 1000;
-yCrab = 1100;
-thetaCrab = -pi/2;
-sizeCrab = 100;
-crabGraphics = drawCrabs (xCrab , yCrab , thetaCrab , sizeCrab);
+##xCrab = 1000;
+##yCrab = 1100;
+##thetaCrab = -pi/2;
+##sizeCrab = 100;
+##crabGraphics = drawCrabs (xCrab , yCrab , thetaCrab , sizeCrab);
 
 %initialize jellyfish
 xJelly = rand*mapWidth;
@@ -52,45 +50,45 @@ thetaJelly = -pi/2;
 sizeJelly = 25;
 jellyGraphics = drawJelly(xJelly,yJelly,thetaJelly,sizeJelly);
 
-while (1) % While not quit, read keyboard and respond
+##while (1) % While not quit, read keyboard and respond
 
-    for i = 1:length(crabGraphics)
-            delete(crabGraphics(i));
-    endfor
-
-    [xCrab, yCrab, thetaCrab] = crabTracking(xCapt, yCapt, xCrab, yCrab);
-    crabGraphics = drawCrabs(xCrab, yCrab, thetaCrab, sizeCrab);
-
-    % Pause for a short duration to control the update rate
-    pause(0.1);
+##    for i = 1:length(crabGraphics)
+##            delete(crabGraphics(i));
+##    endfor
+##
+##    [xCrab, yCrab, thetaCrab, crabStep] = crabTracking(xCapt, yCapt, xCrab, yCrab, crabStep, distFromCrab, );
+##    crabGraphics = drawCrabs(xCrab, yCrab, thetaCrab, sizeCrab);
+##
+##    % Pause for a short duration to control the update rate
+##    pause(0.1);
 
     % erase old jellyfish
-    for i=1:length(jellyGraphics)
-    delete(jellyGraphics(i));
-    endfor
-    % move jellyfish
-    [xJelly,yJelly,thetaJelly] = moveJelly(level, xJelly, yJelly,thetaJelly, sizeJelly, mapHeight,mapWidth);
-    % draw jellyfish
-    jellyGraphics = drawJelly(xJelly,yJelly,thetaJelly,sizeJelly);
+##    for i=1:length(jellyGraphics)
+##    delete(jellyGraphics(i));
+##    endfor
+##    % move jellyfish
+##    [xJelly,yJelly,thetaJelly] = moveJelly(level, xJelly, yJelly,thetaJelly, sizeJelly, mapHeight,mapWidth);
+##    % draw jellyfish
+##    jellyGraphics = drawJelly(xJelly,yJelly,thetaJelly,sizeJelly);
 
-cmd = kbhit(1); % Read the keyboard.
-  if(cmd=='Q')
-    break;
-  endif
+##cmd = kbhit(1); % Read the keyboard.
+##  if(cmd=='Q')
+##    break;
+##  endif
 
-if( cmd == "w" || cmd == "a" || cmd == "d" || cmd == "e")
-%Captain has moved. Respond.
-% erase old captain
+##if( cmd == "w" || cmd == "a" || cmd == "d" || cmd == "e")
+##%Captain has moved. Respond.
+##% erase old captain
+##
+##   for i=1:length( captainGraphics )
+##      set( captainGraphics(i), 'Visible', 'off' );
+##   endfor
+##   % move capt
+##   [xCapt, yCapt, thetaCapt, moveArm] = moveCapt(cmd, xCapt, yCapt, thetaCapt, sizeCapt, mapWidth, mapHeight);
+##
+##   % draw new capt
+##   captainGraphics = drawCapt( xCapt, yCapt, thetaCapt, sizeCapt, moveArm);
 
-   for i=1:length( captainGraphics )
-      set( captainGraphics(i), 'Visible', 'off' );
-   endfor
-   % move capt
-   [xCapt, yCapt, thetaCapt, moveArm] = moveCapt(cmd, xCapt, yCapt, thetaCapt, sizeCapt, mapWidth, mapHeight);
-
-   % draw new capt
-   captainGraphics = drawCapt( xCapt, yCapt, thetaCapt, sizeCapt, moveArm);
->>>>>>> a5c2b72f77e7a15589884356103c12dd1e9fca56
 
 
 
@@ -164,7 +162,6 @@ while(1)
     cmd = kbhit(1); % Read the keyboard.
 
 
-<<<<<<< HEAD
 
     if (crabStunned < 0) %if crab is not stunned
         distFromCrab2 = sqrt(  (xCrab - xCapt)^2 + (yCrab - yCapt)^2  ); % Capt's distance from crab (Pythag Thm)
@@ -416,7 +413,6 @@ while(1)
     endif
     fflush(stdout);
     pause(.01);
-=======
 ##   %crab inputs
 ##   elseif (cmd == "j" || cmd == "l" || cmd == "k" || cmd == "i" || cmd == ",")
 ##   %erase old crab
@@ -431,24 +427,22 @@ while(1)
 ##   crabGraphics = drawCrabs (xCrab , yCrab , thetaCrab , sizeCrab)
 
     %crab movement beta testing
-    if(xCrab != xCapt && yCrab != yCapt)
-    %erase old crab
-   for (i=1:length(crabGraphics))
-                set(crabGraphics(i), 'Visible','off');
-   endfor
-
-   %move crab
-   [xCrab, yCrab, thetaCrab] = crabTracking (xCapt, yCapt, xCrab, yCrab);
-
-   %draw new crab
-   crabGraphics = drawCrabs (xCrab , yCrab , thetaCrab , sizeCrab);
-   endif
-
-endif
-
-fflush(stdout);
-pause(.01);
->>>>>>> a5c2b72f77e7a15589884356103c12dd1e9fca56
+##    if(xCrab != xCapt && yCrab != yCapt)
+##    %erase old crab
+##   for (i=1:length(crabGraphics))
+##                set(crabGraphics(i), 'Visible','off');
+##   endfor
+##
+##   %move crab
+##   [xCrab, yCrab, thetaCrab] = crabTracking (xCapt, yCapt, xCrab, yCrab);
+##
+##   %draw new crab
+##   crabGraphics = drawCrabs (xCrab , yCrab , thetaCrab , sizeCrab);
+##   endif
+##
+##
+##fflush(stdout);
+##pause(.01);
 endwhile
 
 
@@ -483,7 +477,7 @@ elseif (cmd != "Q" && you_win == true);
       crabs();
     endif;
   endwhile;
-endif;
+endif
 
 quit_Game = true %indicates in Command Window when game has been quit
 close all

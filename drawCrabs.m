@@ -5,15 +5,12 @@ crab = getCrabs(size);
 % TODO : Rotate crab from zero heading to heading thetaCrab
 R = getRotation(thetaCrab);
 crabRotated = R*crab;
-<<<<<<< HEAD
 
 T = getTranslation(xCrab, yCrab);
 crab = T*crabRotated;
 
-=======
 T = getTranslation(xCrab, yCrab);
 crab = T*crabRotated;
->>>>>>> a5c2b72f77e7a15589884356103c12dd1e9fca56
 
 % Extract the crab points from the crab matrix crab.
 pt1=crab( : , 1);
