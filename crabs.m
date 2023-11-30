@@ -161,7 +161,21 @@ hasBeenCrafted = 0;
 while(1)
     cmd = kbhit(1); % Read the keyboard.
 
+    
+       % erase old jellyfish
+    for i=1:length(jellyGraphics)
+      delete(jellyGraphics(i));
+    endfor
+    % move jellyfish
+    [xJelly,yJelly,thetaJelly] = moveJelly( xJelly, yJelly,thetaJelly, sizeJelly, mapHeight,mapWidth);
+##    % draw jellyfish
+    jellyGraphics = drawJelly(xJelly,yJelly,thetaJelly,sizeJelly);
 
+    
+    
+    
+    
+      
 
     if (crabStunned < 0) %if crab is not stunned
         distFromCrab2 = sqrt(  (xCrab - xCapt)^2 + (yCrab - yCapt)^2  ); % Capt's distance from crab (Pythag Thm)

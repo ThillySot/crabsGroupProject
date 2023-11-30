@@ -138,4 +138,4 @@ if(cmd == "j")
    endif
 
 endfunction
->>>>>>> a5c2b72f77e7a15589884356103c12dd1e9fca56
+% >>>>>>> a5c2b72f77e7a15589884356103c12dd1e9fca56
