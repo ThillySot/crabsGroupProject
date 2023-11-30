@@ -1,23 +1,34 @@
-function crabs (level)
+function crabs ()
 % Crabs is a kids computer game where a fisherman, called the captain,
 % hunts for a very clever and powerful crab.
 % Draw the game map and initialize map dimensions.
 
-[mapHeight , mapWidth] = drawMap( "BGImage.png" );
-%width = 2048
-%height = 1317
-% Initialize captain location, heading and size
-xCapt = 1200;
-yCapt = 1000;
-thetaCapt = 0;
-sizeCapt = 50;
-moveArm = 'fals';
-spearOff = false;
+restart = 1;
+while(restart)
+
+  %have start up screen
+  level = drawStartScreen("START-SCREEN.png");
+
+
+  [numCrabs, numJelly] = setEnemies(level);
+
+
+  [mapHeight , mapWidth] = drawMap( "BGImage.png" );
+  %width = 2048
+  %height = 1317
+  % Initialize captain location, heading and size
+  xCapt = 1200;
+  yCapt = 1000;
+  thetaCapt = 0;
+  sizeCapt = 50;
+  moveArm = 'fals';
+  spearOff = false;
 
 % Draw the captain and initialize graphics handles
-[captainGraphics, capt2, pt16, captHand] = drawCapt (xCapt, yCapt, thetaCapt, sizeCapt, moveArm, spearOff);
+[captainGraphics, capt2, pt16, captHand, xSpearPoint, ySpearPoint] = drawCapt (xCapt, yCapt, thetaCapt, sizeCapt, moveArm, spearOff);
 
 % Inititalize crab location, heading, and size
+
 xCrab = 250;
 yCrab = 250;
 thetaCrab = 0;
@@ -29,6 +40,21 @@ eCounter = 0;
 crabStunned = 0;
 crabStunnedDuration = 300;
 E_is_Pressed = false;
+
+%initialize the small crab location, heading and size
+  xSmallCrab = rand(1,numCrabs)*mapWidth;
+  ySmallCrab = 0.75*mapHeight + rand(1,numCrabs)*mapHeight/4;
+  thetaSmallCrab = ones(1,numCrabs)*(-pi/2);
+  isCrabCaught = zeros(1,numCrabs);
+  sizeSmallCrab = 50;
+  crabsCaught = 0;
+
+  for j=1:numCrabs
+    if(!isCrabCaught(j))
+      smallCrabGraphics(:,j) = drawSmallCrab (xSmallCrab(j), ySmallCrab(j), thetaSmallCrab(j), sizeSmallCrab);
+    endif
+  endfor
+
 
 % Draw the crab and initialize graphics handles
 [crabGraphics, crab2] = drawCrabs (xCrab , yCrab , thetaCrab , sizeCrab);
@@ -44,11 +70,23 @@ sniperSize = mapWidth/20;
 ##crabGraphics = drawCrabs (xCrab , yCrab , thetaCrab , sizeCrab);
 
 %initialize jellyfish
-xJelly = rand*mapWidth;
-yJelly = 0;
-thetaJelly = -pi/2;
-sizeJelly = 25;
-jellyGraphics = drawJelly(xJelly,yJelly,thetaJelly,sizeJelly);
+  xJelly = rand(1, numJelly)*mapWidth;
+  yJelly = rand(1, numJelly)*mapHeight;
+  thetaJelly = ones(1,numJelly)*(-pi/2);
+  sizeJelly = 25;
+  jellySting = 2;
+
+% initiates the number of jellyfish
+  for k=1:numJelly
+    jellyGraphics(:,k) = drawJelly (xJelly(k), yJelly(k), thetaJelly(k), sizeJelly);
+  endfor
+
+
+##xJelly = rand*mapWidth;
+##yJelly = 0;
+##thetaJelly = -pi/2;
+##sizeJelly = 25;
+##jellyGraphics = drawJelly(xJelly,yJelly,thetaJelly,sizeJelly);
 
 ##while (1) % While not quit, read keyboard and respond
 
@@ -158,7 +196,11 @@ hasBeenCrafted = 0;
 
 %while the user doesn't quit and while the Captain has lives left
 ##while ( cmd != "Q" && j < length(healthGraphics) && you_win == false);
+
+
 while(1)
+    commandwindow();  % keeps the main focus on the window
+
     cmd = kbhit(1); % Read the keyboard.
 
 
@@ -203,6 +245,35 @@ while(1)
     endif
 
 
+  % jellyfish stuff
+   for k=1:numJelly
+     %delete old jellyfish
+    for i=1:length(jellyGraphics(:,k))
+      delete(jellyGraphics(i,k));
+    endfor
+
+    % move jellyfish
+    [xJelly(k), yJelly(k), thetaJelly(k)] = moveJelly(level,xJelly(k),yJelly(k),thetaJelly(k),sizeJelly,mapWidth,mapHeight);
+
+    %draw Jellyfish
+    jellyGraphics(:,k) = drawJelly(xJelly(k),yJelly(k),thetaJelly(k),sizeJelly);
+
+    endfor
+##    % jellyfish sting code
+##
+##     for k=1:numJelly
+##
+##      if(getDist(xJelly(k),yJelly(k),xCapt,yCapt) < 3*sizeCapt)
+##        %healthCapt = healthCapt - jellySting;
+##
+##        % ends the game if the captain's health is at 0
+##          if (healthCapt <= 0)
+##            break
+##          endif
+##      endif
+##    endfor
+
+ %=======================
 
     if( cmd == "w" || cmd == "a" || cmd == "d" || cmd == "e");
       if (spearCounter == 0)
@@ -216,7 +287,7 @@ while(1)
 
 
         % draw new capt
-        [captainGraphics, capt2, pt16, captHand] = drawCapt( xCapt, yCapt, thetaCapt, sizeCapt, moveArm, spearOff);
+        [captainGraphics, capt2, pt16, captHand, xSpearPoint, ySpearPoint] = drawCapt( xCapt, yCapt, thetaCapt, sizeCapt, moveArm, spearOff);
       endif
 
 
@@ -328,7 +399,7 @@ while(1)
 
 
         % draw new capt
-        [captainGraphics, capt2, pt16, captHand] = drawCapt( xCapt, yCapt, thetaCapt, sizeCapt, moveArm, spearOff); %removes capt spear
+        [captainGraphics, capt2, pt16, captHand, xSpearPoint, ySpearPoint] = drawCapt( xCapt, yCapt, thetaCapt, sizeCapt, moveArm, spearOff); %removes capt spear
 
               if (setCounter == 1); %prevents an undefined sniperRifleGraphics from being erased. sniperRifleGraphics is undefined initially bc drawSniperRifle hasn't passed yet.
                 for (i=1: length(sniperRifleGraphics)) %erases old sniper rifle
@@ -404,6 +475,44 @@ while(1)
      endif
    endif
 
+    %Small Crab Stuff
+
+  %makes crab run when near a net
+  for j=1:numCrabs
+    if (!isCrabCaught(j) && getDist(xSpearPoint,ySpearPoint,xSmallCrab(j),ySmallCrab(j)) < 7*sizeCapt) %make Crabs Run
+
+    %erase the old crab
+      for i=1:length(smallCrabGraphics(:,j))
+        delete(smallCrabGraphics(i,j));
+      endfor
+    % get the crab's new angle (pointing towards the net)
+    thetaSmallCrab(j) = getAngle(xSpearPoint, ySpearPoint, xSmallCrab(j), ySmallCrab(j));
+
+    %moves the crab backwards
+    cmd = "k";
+    [xSmallCrab(j),ySmallCrab(j),thetaSmallCrab(j)] = moveSmallCrab(cmd,xSmallCrab(j),ySmallCrab(j),thetaSmallCrab(j),mapHeight,mapWidth,sizeSmallCrab);
+    %draws new crab
+    smallCrabGraphics(:,j) = drawSmallCrab(xSmallCrab(j),ySmallCrab(j),thetaSmallCrab(j),sizeSmallCrab);
+    endif
+  endfor
+
+
+    %dissapears the crab when caught
+ for j=1:numCrabs
+   if(!isCrabCaught(j) && getDist(xSpearPoint, ySpearPoint, xSmallCrab(j), ySmallCrab(j)) < 2*sizeCapt)
+   % keeps track of the number of crabs caught
+
+    crabsCaught = crabsCaught + 1;
+
+    isCrabCaught(j)=1;
+    crabsCaught = sum(isCrabCaught);
+     % erase the old crab
+      for i=1:length(smallCrabGraphics(:,j))
+        delete(smallCrabGraphics(i,j));
+      endfor
+
+    endif
+  endfor
 
     if (cmd == "Q" || j >= length(healthGraphics) || you_win == true) %if quit, if all lives lost, or if you win
       if (cmd == "Q")
@@ -445,41 +554,45 @@ while(1)
 ##pause(.01);
 endwhile
 
-
-
-
-cmd = "null";
 %death screen
-if (cmd != "Q" && you_win == false && combatLog == 0); %activates if Q wasn't pressed while Capt was alive
-  [mapHeight , mapWidth] = drawMap( "you_died.jpg" );
 
-  Press_Any_Key_To_Continue = true %shows in Command Window
-  or_Type_Q_to_Quit = true %shows in Command Window
+restart = drawEndScreen("START-SCREEN.png", numCrabs, crabsCaught);
 
-  cmd = "null";
-  while (cmd == "null"); %while loop keeps Captain on death screen until input is made
-    cmd = kbhit();
-    if (cmd != "Q"); %if any key is pressed, plays game again
-      crabs();
-    endif;
-  endwhile;
+endwhile
 
-elseif (cmd != "Q" && you_win == true);
-  [mapHeight , mapWidth] = drawMap( "you_win_gg.jpg" );
+%cmd = "null";
 
-  Press_Any_Key_To_Continue = true %shows in Command Window
-  or_Type_Q_to_Quit = true %shows in Command Window
-
-  cmd = "null";
-  while (cmd == "null"); %while loop keeps Captain on death screen until input is made
-    cmd = kbhit();
-    if (cmd != "Q"); %if any key is pressed, plays game again
-      crabs();
-    endif;
-  endwhile;
-endif
-
-quit_Game = true %indicates in Command Window when game has been quit
+##if (cmd != "Q" && you_win == false && combatLog == 0); %activates if Q wasn't pressed while Capt was alive
+##  [mapHeight , mapWidth] = drawMap( "you_died.jpg" );
+##
+##  Press_Any_Key_To_Continue = true %shows in Command Window
+##  or_Type_Q_to_Quit = true %shows in Command Window
+##
+##  cmd = "null";
+##  while (cmd == "null"); %while loop keeps Captain on death screen until input is made
+##    cmd = kbhit();
+##    if (cmd != "Q"); %if any key is pressed, plays game again
+##      crabs();
+##    endif;
+##  endwhile;
+##
+##elseif (cmd != "Q" && you_win == true);
+##  [mapHeight , mapWidth] = drawMap( "you_win_gg.jpg" );
+##
+##  Press_Any_Key_To_Continue = true %shows in Command Window
+##  or_Type_Q_to_Quit = true %shows in Command Window
+##
+##  cmd = "null";
+##  while (cmd == "null"); %while loop keeps Captain on death screen until input is made
+##    cmd = kbhit();
+##    if (cmd != "Q"); %if any key is pressed, plays game again
+##      crabs();
+##    endif;
+##  endwhile;
+##endif
+##
+##quit_Game = true %indicates in Command Window when game has been quit
+clear
 close all
 
 endfunction

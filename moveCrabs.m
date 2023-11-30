@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 ##function [xCrab, yCrab, thetaCrab] = moveCrabs(cmd,x,y,theta,size,height,width);
 ##
 ##  step = 150;
@@ -68,7 +68,7 @@
 ##   endif
 ##
 ##endfunction
-=======
+
 function [xCrab, yCrab, thetaCrab] = moveCrabs(cmd,x,y,theta,size,height,width);
 
   step = 150;
@@ -81,7 +81,7 @@ if(cmd == "j")
      yTemp = y - step * cos(theta);
      thetaCrab = theta;
 
-     if (IsOnMap(xTemp, yTemp, width, height, size) )
+     if (isOnMap(xTemp, yTemp, width, height, size) )
        xCrab = xTemp
        yCrab = yTemp
      else
@@ -96,7 +96,7 @@ if(cmd == "j")
      yTemp = y + step * cos(theta);
      thetaCrab = theta;
 
-     if (IsOnMap(xTemp, yTemp, width, height, size) )
+     if (isOnMap(xTemp, yTemp, width, height, size) )
        xCrab = xTemp
        yCrab = yTemp
      else
@@ -110,7 +110,7 @@ if(cmd == "j")
      yTemp = y - step * sin(theta);
      thetaCrab = theta;
 
-     if (IsOnMap(xTemp, yTemp, width, height, size) )
+     if (isOnMap(xTemp, yTemp, width, height, size) )
        xCrab = xTemp;
        yCrab = yTemp;
      else
@@ -138,4 +138,3 @@ if(cmd == "j")
    endif
 
 endfunction
->>>>>>> a5c2b72f77e7a15589884356103c12dd1e9fca56

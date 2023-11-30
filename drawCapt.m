@@ -1,4 +1,4 @@
-function [captainGraphics, capt2, pt16, captHand] = drawCapt (xCapt , yCapt , thetaCapt , sizeCapt, moveArm, bool);
+function [captainGraphics, capt2, pt16, captHand, xSpearPoint, ySpearPoint] = drawCapt (xCapt , yCapt , thetaCapt , sizeCapt, moveArm, bool);
 
 bool = bool;
 
@@ -32,6 +32,9 @@ pt15=capt( : , 19);
 pt16 = capt( : , 20);
 
 capt2 = [pt13, pt15, pt14];
+
+xSpearPoint = pt13(1);
+ySpearPoint = pt13(2);
 % Draw the captain and set the return vector of graphics handles.
 captainGraphics(1) = drawLine(pt1 , pt2 , "k");
 captainGraphics(2) = drawLine(pt2 , pt3 , "k");
