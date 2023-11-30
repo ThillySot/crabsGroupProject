@@ -138,3 +138,7 @@ if(cmd == "j")
    endif
 
 endfunction
+<<<<<<< HEAD
+=======
+% >>>>>>> a5c2b72f77e7a15589884356103c12dd1e9fca56
+>>>>>>> 1e65d9ee02cb3d34a4d899f5d4fff906b7bf0f57
