@@ -1,12 +1,15 @@
-function [xJelly,yJelly,thetaJelly] = moveJelly( x, y, theta, size, height,width)
+function [xJelly,yJelly,thetaJelly] = moveJelly (level, x, y, theta, size, width, height)
 
-  moveScale = 50;
-  step = moveScale;
-  yJelly = y + step;
+jellyMove = 20;
+dStep = jellyMove+(level*3);
+
   xJelly = x;
+  yJelly = y + dStep;
   thetaJelly = theta;
+
   if (yJelly > height-10*size)
-    yJelly=size;
-    xJelly=width*rand;
+    xJelly = rand*width;
+    yJelly = size;
+    thetaJelly = theta;
   endif
 endfunction
