@@ -2,7 +2,7 @@ function [numCrabs, numJelly] = setEnemies (level)
 
   if (level <=3)
     numCrabs = level;
-    numJelly = 3;
+    numJelly = 0;
 
   elseif (level <= 6)
     numCrabs = level;

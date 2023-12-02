@@ -63,11 +63,6 @@ E_is_Pressed = false;
 healthGraphics = drawHealthbar(mapWidth, mapHeight);
 j=0;
 sniperSize = mapWidth/20;
-##xCrab = 1000;
-##yCrab = 1100;
-##thetaCrab = -pi/2;
-##sizeCrab = 100;
-##crabGraphics = drawCrabs (xCrab , yCrab , thetaCrab , sizeCrab);
 
 %initialize jellyfish
   xJelly = rand(1, numJelly)*mapWidth;
@@ -82,89 +77,6 @@ sniperSize = mapWidth/20;
   endfor
 
 
-##xJelly = rand*mapWidth;
-##yJelly = 0;
-##thetaJelly = -pi/2;
-##sizeJelly = 25;
-##jellyGraphics = drawJelly(xJelly,yJelly,thetaJelly,sizeJelly);
-
-##while (1) % While not quit, read keyboard and respond
-
-##    for i = 1:length(crabGraphics)
-##            delete(crabGraphics(i));
-##    endfor
-##
-##    [xCrab, yCrab, thetaCrab, crabStep] = crabTracking(xCapt, yCapt, xCrab, yCrab, crabStep, distFromCrab, );
-##    crabGraphics = drawCrabs(xCrab, yCrab, thetaCrab, sizeCrab);
-##
-##    % Pause for a short duration to control the update rate
-##    pause(0.1);
-
-    % erase old jellyfish
-##    for i=1:length(jellyGraphics)
-##    delete(jellyGraphics(i));
-##    endfor
-##    % move jellyfish
-##    [xJelly,yJelly,thetaJelly] = moveJelly(level, xJelly, yJelly,thetaJelly, sizeJelly, mapHeight,mapWidth);
-##    % draw jellyfish
-##    jellyGraphics = drawJelly(xJelly,yJelly,thetaJelly,sizeJelly);
-
-##cmd = kbhit(1); % Read the keyboard.
-##  if(cmd=='Q')
-##    break;
-##  endif
-
-##if( cmd == "w" || cmd == "a" || cmd == "d" || cmd == "e")
-##%Captain has moved. Respond.
-##% erase old captain
-##
-##   for i=1:length( captainGraphics )
-##      set( captainGraphics(i), 'Visible', 'off' );
-##   endfor
-##   % move capt
-##   [xCapt, yCapt, thetaCapt, moveArm] = moveCapt(cmd, xCapt, yCapt, thetaCapt, sizeCapt, mapWidth, mapHeight);
-##
-##   % draw new capt
-##   captainGraphics = drawCapt( xCapt, yCapt, thetaCapt, sizeCapt, moveArm);
-
-
-
-
-%draw the sniper-scope and initialize graphics handles
-sniperScopeSize = mapWidth/20;
-scopeGraphics = drawSniperScope(mapWidth, mapHeight);
-xSniperScope = (3*mapWidth/4) + 2.5*sniperScopeSize; %center x value
-ySniperScope = (mapHeight/4) + 1.5*sniperScopeSize; %center y value
-
-%draw the sniper-body and initialize graphics handles
-sniperBodySize = mapWidth/20;
-sniperBodyGraphics = drawSniperBody(mapWidth, mapHeight); %7/8
-xSniperBody = (5*mapWidth/8) + sniperBodySize; %center x value
-ySniperBody = (5*mapHeight/8) + sniperBodySize/2; %center y value
-
-%draw the sniper-nozzle and initialize graphics handles
-sniperNozzleSize = mapWidth/20;
-sniperNozzleGraphics = drawSniperNozzle(mapWidth, mapHeight);
-xSniperNozzle = mapWidth/2 + sniperNozzleSize;
-ySniperNozzle = 9*mapHeight/10 + sniperNozzleSize/2;
-
-%draw the sniper-tail and initialize graphics handles
-sniperTailSize = mapWidth/20;
-sniperTailGraphics = drawSniperTail(mapWidth, mapHeight);
-xSniperTail = mapWidth/10 + 2*sniperTailSize;
-ySniperTail = mapHeight/10 + 1.5*sniperTailSize;
-
-%draw the sniper-grip and initialize graphics handles
-sniperGripSize = mapWidth/20;
-sniperGripGraphics = drawSniperGrip(mapWidth, mapHeight);
-xSniperGrip = mapWidth/2 + sniperGripSize;
-ySniperGrip = mapHeight/2 + sniperGripSize/2;
-
-%Draw the CNC-Machine and initialize graphics handles
-CNCMachineSize = mapWidth/10;
-CNCMachineGraphics = drawCNCMachine (mapWidth, mapHeight);
-xCNCMachine = 7*mapWidth/8;
-yCNCMachine = 7*mapHeight/8;
 
 cmd = "null";
 piece1 = false;
@@ -193,6 +105,9 @@ reload = reloadDefault;
 reloadYes = 0;
 combatLog = 0;
 hasBeenCrafted = 0;
+healthIndex = 0;
+partsNowExist = false;
+partsAllCollected = false;
 
 %while the user doesn't quit and while the Captain has lives left
 ##while ( cmd != "Q" && j < length(healthGraphics) && you_win == false);
@@ -203,7 +118,7 @@ while(1)
 
     cmd = kbhit(1); % Read the keyboard.
 
-
+if (numJelly > 0)
 % jellyfish stuff
  for k=1:numJelly
    %delete old jellyfish
@@ -218,7 +133,7 @@ while(1)
   jellyGraphics(:,k) = drawJelly(xJelly(k),yJelly(k),thetaJelly(k),sizeJelly);
 
   endfor
-
+endif
 
 
 
@@ -240,25 +155,29 @@ while(1)
 
         if (distFromCrab2 <= 1.5*sizeCapt && invincibility < 0) %if Capt touched crab off immunity protection
 
-            if (j <= length(healthGraphics) - 6); % actiavtes if captain has lives left. otherwise, while loop ends
+            if (healthIndex <= length(healthGraphics) - 6); % actiavtes if captain has lives left. otherwise, while loop ends
 
-              for i=1+j: 6+j; %for loop removes one life off the screen
+              for i=1+healthIndex: 6+healthIndex; %for loop removes one life off the screen
                   set( healthGraphics(i), 'Visible', 'off' );
               endfor
 
-              j = j +6;  %adds 6 to j because each life consists of 6 points
+              healthIndex = healthIndex + 6  %adds 6 to j because each life consists of 6 points
               captWasHit = true %indicates in Command Window the captain was hit
               invincibility = 5; %immunity frames after getting hit
             endif
         endif
 
-        if (invincibility > 0)
+        if (invincibility >= 0)
             invincibility = invincibility - 1 %invincibility time goes down by 1
         endif
 
         crabStep = crabStep + crabSpeedChange; %crab goes faster
     else %if crab is stunned
       crabStunned = crabStunned - 1; %crab stun duration goes down by 1
+    endif
+
+    if (healthIndex >= 18)
+      break;
     endif
 
 
@@ -277,6 +196,47 @@ while(1)
 ##    endfor
 
  %=======================
+
+      if (crabsCaught == numCrabs && partsNowExist == false)
+
+          %draw the sniper-scope and initialize graphics handles
+          sniperScopeSize = mapWidth/20;
+          scopeGraphics = drawSniperScope(mapWidth, mapHeight);
+          xSniperScope = (3*mapWidth/4) + 2.5*sniperScopeSize; %center x value
+          ySniperScope = (mapHeight/4) + 1.5*sniperScopeSize; %center y value
+
+          %draw the sniper-body and initialize graphics handles
+          sniperBodySize = mapWidth/20;
+          sniperBodyGraphics = drawSniperBody(mapWidth, mapHeight); %7/8
+          xSniperBody = (5*mapWidth/8) + sniperBodySize; %center x value
+          ySniperBody = (5*mapHeight/8) + sniperBodySize/2; %center y value
+
+          %draw the sniper-nozzle and initialize graphics handles
+          sniperNozzleSize = mapWidth/20;
+          sniperNozzleGraphics = drawSniperNozzle(mapWidth, mapHeight);
+          xSniperNozzle = mapWidth/2 + sniperNozzleSize;
+          ySniperNozzle = 9*mapHeight/10 + sniperNozzleSize/2;
+
+          %draw the sniper-tail and initialize graphics handles
+          sniperTailSize = mapWidth/20;
+          sniperTailGraphics = drawSniperTail(mapWidth, mapHeight);
+          xSniperTail = mapWidth/10 + 2*sniperTailSize;
+          ySniperTail = mapHeight/10 + 1.5*sniperTailSize;
+
+          %draw the sniper-grip and initialize graphics handles
+          sniperGripSize = mapWidth/20;
+          sniperGripGraphics = drawSniperGrip(mapWidth, mapHeight);
+          xSniperGrip = mapWidth/2 + sniperGripSize;
+          ySniperGrip = mapHeight/2 + sniperGripSize/2;
+
+          %Draw the CNC-Machine and initialize graphics handles
+          CNCMachineSize = mapWidth/10;
+          CNCMachineGraphics = drawCNCMachine (mapWidth, mapHeight);
+          xCNCMachine = 7*mapWidth/8;
+          yCNCMachine = 7*mapHeight/8;
+
+          partsNowExist = true;
+      endif
 
     if( cmd == "w" || cmd == "a" || cmd == "d" || cmd == "e");
       if (spearCounter == 0)
@@ -313,24 +273,36 @@ while(1)
                   endif
                endfor
           endfor
+        pause(0.2);
+        % erase old captain
+        for i=1:length( captainGraphics );
+            set( captainGraphics(i), 'Visible', 'off' );
+        endfor
+
+        % move capt
+        [xCapt, yCapt, thetaCapt, moveArm, dStep] = moveCapt(cmd, xCapt, yCapt, thetaCapt, sizeCapt, mapWidth, mapHeight);
+
+        moveArm = 'fals';
+        % draw new capt
+        [captainGraphics, capt2, pt16, captHand, xSpearPoint, ySpearPoint] = drawCapt( xCapt, yCapt, thetaCapt, sizeCapt, moveArm, spearOff);
       endif
 
 
-
+      if (crabsCaught == numCrabs && partsAllCollected == false)
       %Sniper Body
-      if (piece1 == false) %'if loop' used to increase program efficiency
-            xDist = abs(xCapt - xSniperBody);
-            yDist = abs(yCapt - ySniperBody);
+          if (piece1 == false)
+            xDist = abs(xCapt - xSniperBody)
+            yDist = abs(yCapt - ySniperBody)
             if (xDist <= sniperBodySize + sizeCapt && yDist <= sniperBodySize/2 + sizeCapt) %if capt touches sniper body
               for (b=1:length(sniperBodyGraphics));
                 set(sniperBodyGraphics(b), 'Visible','off');
               endfor
               piece1 = true; %program stops looking for sniper body
             endif
-      endif
+          endif
 
       %Sniper Grip
-      if (piece2 == false)
+          if (piece2 == false)
             xDist = abs(xCapt - xSniperGrip);
             yDist = abs(yCapt - ySniperGrip);
             if (xDist <= 1.25*sniperGripSize + sizeCapt && yDist <= sniperGripSize/2 + sizeCapt)
@@ -339,10 +311,10 @@ while(1)
               endfor
               piece2 = true;
             endif
-       endif
+          endif
 
       %Sniper Nozzle
-      if (piece3 == false)
+          if (piece3 == false)
             xDist = abs(xCapt - xSniperNozzle);
             yDist = abs(yCapt - ySniperNozzle);
             if (xDist <= 2*sniperNozzleSize + sizeCapt && yDist <= 1.5*sniperNozzleSize + sizeCapt)
@@ -351,10 +323,10 @@ while(1)
               endfor
               piece3 = true;
             endif
-       endif
+          endif
 
       %Sniper Scope
-      if (piece4 == false)
+          if (piece4 == false)
             xDist = abs(xCapt - xSniperScope);
             yDist = abs(yCapt - ySniperScope);
             if (xDist <= 2.5*sniperScopeSize + sizeCapt && yDist <= 1.5*sniperScopeSize + sizeCapt)
@@ -363,10 +335,10 @@ while(1)
               endfor
               piece4 = true;
             endif
-       endif
+          endif
 
       %Sniper Tail
-      if (piece5 == false)
+          if (piece5 == false)
             xDist = abs(xCapt - xSniperTail);
             yDist = abs(yCapt - ySniperTail);
             if (xDist <= 2*sniperTailSize + sizeCapt && yDist <= 1.5*sniperTailSize + sizeCapt)
@@ -375,9 +347,14 @@ while(1)
               endfor
               piece5 = true;
             endif
-       endif
+          endif
 
-      if (piece1 == true && piece2 == true && piece3 == true && piece4 == true && piece5 == true && hasBeenCrafted == 0) %if all sniper pieces are found
+          if (piece1 == true && piece2 == true && piece3 == true && piece4 == true && piece5 == true)
+            partsAllCollected = true;
+          endif
+      endif
+
+      if (partsAllCollected == true && hasBeenCrafted == 0) %if all sniper pieces are found
             get_to_the_CNC_Machine = true;
             xDist = abs(xCapt - xCNCMachine);
             yDist = abs(yCapt - yCNCMachine);
@@ -479,45 +456,46 @@ while(1)
    endif
 
     %Small Crab Stuff
+    if (crabsCaught != numCrabs)
+          %makes crab run when near a net
+          for j=1:numCrabs
+            if (!isCrabCaught(j) && getDist(xSpearPoint,ySpearPoint,xSmallCrab(j),ySmallCrab(j)) < 7*sizeCapt) %make Crabs Run
 
-  %makes crab run when near a net
-  for j=1:numCrabs
-    if (!isCrabCaught(j) && getDist(xSpearPoint,ySpearPoint,xSmallCrab(j),ySmallCrab(j)) < 7*sizeCapt) %make Crabs Run
+            %erase the old crab
+              for i=1:length(smallCrabGraphics(:,j))
+                delete(smallCrabGraphics(i,j));
+              endfor
+            % get the crab's new angle (pointing towards the net)
+            thetaSmallCrab(j) = getAngle(xSpearPoint, ySpearPoint, xSmallCrab(j), ySmallCrab(j));
 
-    %erase the old crab
-      for i=1:length(smallCrabGraphics(:,j))
-        delete(smallCrabGraphics(i,j));
-      endfor
-    % get the crab's new angle (pointing towards the net)
-    thetaSmallCrab(j) = getAngle(xSpearPoint, ySpearPoint, xSmallCrab(j), ySmallCrab(j));
+            %moves the crab backwards
+            cmd = "k";
+            [xSmallCrab(j),ySmallCrab(j),thetaSmallCrab(j)] = moveSmallCrab(cmd,xSmallCrab(j),ySmallCrab(j),thetaSmallCrab(j),mapHeight,mapWidth,sizeSmallCrab);
+            %draws new crab
+            smallCrabGraphics(:,j) = drawSmallCrab(xSmallCrab(j),ySmallCrab(j),thetaSmallCrab(j),sizeSmallCrab);
+            endif
+          endfor
 
-    %moves the crab backwards
-    cmd = "k";
-    [xSmallCrab(j),ySmallCrab(j),thetaSmallCrab(j)] = moveSmallCrab(cmd,xSmallCrab(j),ySmallCrab(j),thetaSmallCrab(j),mapHeight,mapWidth,sizeSmallCrab);
-    %draws new crab
-    smallCrabGraphics(:,j) = drawSmallCrab(xSmallCrab(j),ySmallCrab(j),thetaSmallCrab(j),sizeSmallCrab);
+
+            %dissapears the crab when caught
+         for j=1:numCrabs
+           if(!isCrabCaught(j) && getDist(xSpearPoint, ySpearPoint, xSmallCrab(j), ySmallCrab(j)) < 2*sizeCapt)
+           % keeps track of the number of crabs caught
+
+            crabsCaught = crabsCaught + 1;
+
+            isCrabCaught(j)=1;
+            crabsCaught = sum(isCrabCaught);
+             % erase the old crab
+              for i=1:length(smallCrabGraphics(:,j))
+                delete(smallCrabGraphics(i,j));
+              endfor
+
+            endif
+          endfor
     endif
-  endfor
 
-
-    %dissapears the crab when caught
- for j=1:numCrabs
-   if(!isCrabCaught(j) && getDist(xSpearPoint, ySpearPoint, xSmallCrab(j), ySmallCrab(j)) < 2*sizeCapt)
-   % keeps track of the number of crabs caught
-
-    crabsCaught = crabsCaught + 1;
-
-    isCrabCaught(j)=1;
-    crabsCaught = sum(isCrabCaught);
-     % erase the old crab
-      for i=1:length(smallCrabGraphics(:,j))
-        delete(smallCrabGraphics(i,j));
-      endfor
-
-    endif
-  endfor
-
-    if (cmd == "Q" || j >= length(healthGraphics) || you_win == true) %if quit, if all lives lost, or if you win
+    if (cmd == "Q" || you_win == true) %if quit, if all lives lost, or if you win
       if (cmd == "Q")
         combatLog = 1;
       endif
