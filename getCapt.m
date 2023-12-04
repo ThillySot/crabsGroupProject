@@ -1,5 +1,4 @@
 function capt = getCapt (captSize,moveArm, bool);
-  bool = bool;
 %{
 Right Hand Spear Tip
   14 ____12____________13
@@ -57,20 +56,19 @@ captPt17=[ -0.5*captSize; 1.5*captSize; 1]; %left
 
 
 %spear
-if(moveArm == "true" && bool == 0)
-  captPt12 = [ 2*captSize; -2*captSize; 1]; %right hand
-  captPt13=[ 5*captSize; -2*captSize; 1]; %spear point
-  captPt14=[ captSize; -2*captSize; 1]; %spear end
-  captPt19 = [ 3*captSize; -2*captSize; 1]; %spear middle
-  captPt18=[ 1.5*captSize; -1.5*captSize; 1]; %right elbow
-else
-   captPt12 = [ 0; -2*captSize; 1]; %right hand
-   captPt13=[ 3*captSize; -2*captSize; 1]; % spear point
-   captPt14=[ -captSize; -2*captSize; 1]; % spear end
-   captPt18=[ -0.5*captSize; -1.5*captSize; 1]; %right elbow
-   captPt19 = [ 2*captSize; -2*captSize; 1]; %spear middle
-
-endif
+    if(moveArm == "true" && bool == false)
+      captPt12 = [ 2*captSize; -2*captSize; 1]; %right hand
+      captPt13=[ 5*captSize; -2*captSize; 1]; %spear point
+      captPt14=[ captSize; -2*captSize; 1]; %spear end
+      captPt19 = [ 3*captSize; -2*captSize; 1]; %spear middle
+      captPt18=[ 1.5*captSize; -1.5*captSize; 1]; %right elbow
+    else
+       captPt12 = [ 0; -2*captSize; 1]; %right hand
+       captPt13=[ 3*captSize; -2*captSize; 1]; % spear point
+       captPt14=[ -captSize; -2*captSize; 1]; % spear end
+       captPt18=[ -0.5*captSize; -1.5*captSize; 1]; %right elbow
+       captPt19 = [ 2*captSize; -2*captSize; 1]; %spear middle
+    endif
 
 
   %captain matrix

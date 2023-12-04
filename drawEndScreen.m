@@ -5,7 +5,7 @@ function restart = drawEndScreen(img, numCrabs, crabsCaught)
 
   textHandle1 = text(1000,1000,'AH! Youve Been NIPPED! You Caught', 'FontSize', 20, 'Color', 'red');
 
-  pause(4)
+  pause(1)
   delete(textHandle1)
   textHandle2 = text(1100,1000,'would you like to play again?', 'FontSize', 14, 'Color', 'red');
 

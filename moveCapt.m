@@ -10,6 +10,19 @@ xCapt = x + dStep*cos(theta);
 yCapt = y + dStep*sin(theta);
 thetaCapt = theta;
 moveArm = 'fals';
+      if (IsOnMap(xCapt, yCapt, width, height, size));
+         xCapt = xCapt;
+         yCapt = yCapt;
+      else
+         xCapt = x;
+         yCapt = y;
+      endif
+
+elseif (cmd == "s")
+xCapt = x - dStep*cos(theta);
+yCapt = y - dStep*sin(theta);
+thetaCapt = theta;
+moveArm = 'fals';
 
      if (IsOnMap(xCapt, yCapt, width, height, size));
        xCapt = xCapt;

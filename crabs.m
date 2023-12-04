@@ -38,7 +38,7 @@ crabSpeedChange = .2*crabStep;
 crabStepWhen_E_Is_Pressed = crabStep - crabSpeedChange;
 eCounter = 0;
 crabStunned = 0;
-crabStunnedDuration = 300;
+crabStunnedDuration = 300* (1/level^2)
 E_is_Pressed = false;
 
 %initialize the small crab location, heading and size
@@ -96,7 +96,6 @@ sniperRifleCraft = false;
 spearCounter = 0;
 bulletHit = "null";
 you_win = false;
-setCounter = 0;
 invincibility = 0;
 gunTrigger = 0;
 bulletInBounds = 0;
@@ -108,6 +107,9 @@ hasBeenCrafted = 0;
 healthIndex = 0;
 partsNowExist = false;
 partsAllCollected = false;
+sniperNowCrafted = false;
+bulletNumber = 0;
+crabHealth = 100;
 
 %while the user doesn't quit and while the Captain has lives left
 ##while ( cmd != "Q" && j < length(healthGraphics) && you_win == false);
@@ -168,12 +170,12 @@ endif
         endif
 
         if (invincibility >= 0)
-            invincibility = invincibility - 1 %invincibility time goes down by 1
+            invincibility = invincibility - 1; %invincibility time goes down by 1
         endif
 
         crabStep = crabStep + crabSpeedChange; %crab goes faster
     else %if crab is stunned
-      crabStunned = crabStunned - 1; %crab stun duration goes down by 1
+      crabStunned = crabStunned - 1 %crab stun duration goes down by 1
     endif
 
     if (healthIndex >= 18)
@@ -196,6 +198,113 @@ endif
 ##    endfor
 
  %=======================
+
+
+    if( cmd == "w" || cmd == "a" || cmd == "d" || cmd == "s" || cmd == "e");
+        % erase old captain
+        for i=1:length( captainGraphics );
+            set( captainGraphics(i), 'Visible', 'off' );
+        endfor
+
+        % move capt
+        [xCapt, yCapt, thetaCapt, moveArm, dStep] = moveCapt(cmd, xCapt, yCapt, thetaCapt, sizeCapt, mapWidth, mapHeight);
+
+
+        % draw new capt
+        [captainGraphics, capt2, pt16, captHand, xSpearPoint, ySpearPoint] = drawCapt( xCapt, yCapt, thetaCapt, sizeCapt, moveArm, spearOff);
+
+
+      %sees if capt hit crab when 'e' is pressed. spearOff is always false til sniper rifle is crafted
+      if (cmd == "e" && spearOff == false)
+          for (i=1: 3)
+              xSpearPoint = capt2(1, i); %capt2 matrix consists of 3 invis nodes on his spear - middle, top, bottom
+              ySpearPoint = capt2(2, i);
+
+              for (a=1: length(crab2)) %crab2 matrix consists of 3 invis nodes - middle, top, bottom
+                  x2 = crab2(1, a);
+                  y2 = crab2(2, a);
+                  distFromSpear = sqrt((xSpearPoint-x2)^2+ (ySpearPoint-y2)^2);
+
+                  if (distFromSpear <= sizeCrab/2) %if crab is hit
+                      crabStep = crabStepWhen_E_Is_Pressed;
+                      hit = true
+                      crabStunned = crabStunnedDuration;
+                      E_is_Pressed = true;
+                  endif
+              endfor
+          endfor
+
+          for j=1:numCrabs
+             xSpearPoint = capt2(1, 1);
+             ySpearPoint = capt2(2, 1);
+##             distSmallCrab = sqrt((xSpearPoint - xSmallCrab(j))^2 + (ySpearPoint - ySmallCrab(j))^2)
+             if(!isCrabCaught(j) && getDist(xSpearPoint, ySpearPoint, xSmallCrab(j), ySmallCrab(j)) < 2*sizeCapt)
+               % keeps track of the number of crabs caught
+
+                crabsCaught = crabsCaught + 1;
+
+                isCrabCaught(j)=1;
+                crabsCaught = sum(isCrabCaught);
+                % erase the old crab
+                for i=1:length(smallCrabGraphics(:,j))
+                    delete(smallCrabGraphics(i,j));
+                endfor
+             endif
+          endfor
+
+        pause(0.2);
+        % erase old captain
+        for i=1:length( captainGraphics );
+            set( captainGraphics(i), 'Visible', 'off' );
+        endfor
+
+        % move capt
+        [xCapt, yCapt, thetaCapt, moveArm, dStep] = moveCapt(cmd, xCapt, yCapt, thetaCapt, sizeCapt, mapWidth, mapHeight);
+
+        moveArm = "fals";
+        % draw new capt
+        [captainGraphics, capt2, pt16, captHand, xSpearPoint, ySpearPoint] = drawCapt( xCapt, yCapt, thetaCapt, sizeCapt, moveArm, spearOff);
+      endif
+
+      %Small Crab Stuff
+    if (crabsCaught != numCrabs)
+          %makes crab run when near a net
+          for j=1:numCrabs
+            if (!isCrabCaught(j) && getDist(xSpearPoint,ySpearPoint,xSmallCrab(j),ySmallCrab(j)) < 7*sizeCapt) %make Crabs Run
+
+            %erase the old crab
+              for i=1:length(smallCrabGraphics(:,j))
+                delete(smallCrabGraphics(i,j));
+              endfor
+            % get the crab's new angle (pointing towards the net)
+            thetaSmallCrab(j) = getAngle(xSpearPoint, ySpearPoint, xSmallCrab(j), ySmallCrab(j));
+
+            %moves the crab backwards
+            cmd = "k";
+            [xSmallCrab(j),ySmallCrab(j),thetaSmallCrab(j)] = moveSmallCrab(cmd,xSmallCrab(j),ySmallCrab(j),thetaSmallCrab(j),mapHeight,mapWidth,sizeSmallCrab);
+            %draws new crab
+            smallCrabGraphics(:,j) = drawSmallCrab(xSmallCrab(j),ySmallCrab(j),thetaSmallCrab(j),sizeSmallCrab);
+            endif
+          endfor
+
+            %dissapears the crab when caught
+         for j=1:numCrabs
+
+           if(!isCrabCaught(j) && getDist(xSpearPoint, ySpearPoint, xSmallCrab(j), ySmallCrab(j)) < 2*sizeCapt)
+           % keeps track of the number of crabs caught
+
+            crabsCaught = crabsCaught + 1;
+
+            isCrabCaught(j)=1;
+            crabsCaught = sum(isCrabCaught);
+             % erase the old crab
+              for i=1:length(smallCrabGraphics(:,j))
+                delete(smallCrabGraphics(i,j));
+              endfor
+
+            endif
+          endfor
+    endif
 
       if (crabsCaught == numCrabs && partsNowExist == false)
 
@@ -234,65 +343,15 @@ endif
           CNCMachineGraphics = drawCNCMachine (mapWidth, mapHeight);
           xCNCMachine = 7*mapWidth/8;
           yCNCMachine = 7*mapHeight/8;
-
           partsNowExist = true;
-      endif
-
-    if( cmd == "w" || cmd == "a" || cmd == "d" || cmd == "e");
-      if (spearCounter == 0)
-        % erase old captain
-        for i=1:length( captainGraphics );
-            set( captainGraphics(i), 'Visible', 'off' );
-        endfor
-
-        % move capt
-        [xCapt, yCapt, thetaCapt, moveArm, dStep] = moveCapt(cmd, xCapt, yCapt, thetaCapt, sizeCapt, mapWidth, mapHeight);
-
-
-        % draw new capt
-        [captainGraphics, capt2, pt16, captHand, xSpearPoint, ySpearPoint] = drawCapt( xCapt, yCapt, thetaCapt, sizeCapt, moveArm, spearOff);
-      endif
-
-
-      %sees if capt hit crab when 'e' is pressed. spearOff is always false til sniper rifle is crafted
-      if (cmd == "e" && spearOff == false)
-          for (i=1: 3)
-              xSpearPoint = capt2(1, i); %capt2 matrix consists of 3 invis nodes on his spear - middle, top, bottom
-              ySpearPoint = capt2(2, i);
-
-              for (a=1: length(crab2)) %crab2 matrix consists of 3 invis nodes - middle, top, bottom
-                  x2 = crab2(1, a);
-                  y2 = crab2(2, a);
-                  distFromSpear = sqrt((xSpearPoint-x2)^2+ (ySpearPoint-y2)^2);
-
-                  if (distFromSpear <= sizeCrab/2) %if crab is hit
-                      crabStep = crabStepWhen_E_Is_Pressed;
-                      hit = true
-                      crabStunned = crabStunnedDuration;
-                      E_is_Pressed = true;
-                  endif
-               endfor
-          endfor
-        pause(0.2);
-        % erase old captain
-        for i=1:length( captainGraphics );
-            set( captainGraphics(i), 'Visible', 'off' );
-        endfor
-
-        % move capt
-        [xCapt, yCapt, thetaCapt, moveArm, dStep] = moveCapt(cmd, xCapt, yCapt, thetaCapt, sizeCapt, mapWidth, mapHeight);
-
-        moveArm = 'fals';
-        % draw new capt
-        [captainGraphics, capt2, pt16, captHand, xSpearPoint, ySpearPoint] = drawCapt( xCapt, yCapt, thetaCapt, sizeCapt, moveArm, spearOff);
       endif
 
 
       if (crabsCaught == numCrabs && partsAllCollected == false)
       %Sniper Body
           if (piece1 == false)
-            xDist = abs(xCapt - xSniperBody)
-            yDist = abs(yCapt - ySniperBody)
+            xDist = abs(xCapt - xSniperBody);
+            yDist = abs(yCapt - ySniperBody);
             if (xDist <= sniperBodySize + sizeCapt && yDist <= sniperBodySize/2 + sizeCapt) %if capt touches sniper body
               for (b=1:length(sniperBodyGraphics));
                 set(sniperBodyGraphics(b), 'Visible','off');
@@ -360,140 +419,103 @@ endif
             yDist = abs(yCapt - yCNCMachine);
             if (xDist <= CNCMachineSize/2 + sizeCapt && yDist <= CNCMachineSize/4 + sizeCapt) %if capt touches CNC Machine
               sniperRifleCraft = true;
+              spearOff = true;
               hasBeenCrafted = 1; %program stops looking for CNC Machine
             endif
-       endif
+      endif
 
 
-      if (sniperRifleCraft == true) %if sniper rifle is crafted
-              spearOff = true;
-              spearCounter = 1;
+      if (sniperRifleCraft == true && cmd != 'e') %if sniper rifle is crafted
+        if (sniperNowCrafted == true)
+            for (i=1: length(sniperRifleGraphics)) %erases old sniper rifle
+                 set (sniperRifleGraphics(i), 'Visible', 'off');
+            endfor
 
-        % erase old captain
-        for i=1:length( captainGraphics );
-            set( captainGraphics(i), 'Visible', 'off' );
-        endfor
+        endif
 
-        % move capt
-        [xCapt, yCapt, thetaCapt, moveArm, dStep] = moveCapt(cmd, xCapt, yCapt, thetaCapt, sizeCapt, mapWidth, mapHeight);
+##        % erase old captain
+##        for i=1:length( captainGraphics );
+##            set( captainGraphics(i), 'Visible', 'off' );
+##        endfor
+##
+##        % move capt
+##        [xCapt, yCapt, thetaCapt, moveArm, dStep] = moveCapt(cmd, xCapt, yCapt, thetaCapt, sizeCapt, mapWidth, mapHeight);
+##        % draw new capt
+##        [captainGraphics, capt2, pt16, captHand, xSpearPoint, ySpearPoint] = drawCapt( xCapt, yCapt, thetaCapt, sizeCapt, moveArm, spearOff); %removes capt spear
+
+        %captHand is captain's hand coords if capt was locted at origin with 0 degree rotation.
+        %captHand was extracted from drawCapt earlier on
+
+        xCaptHand = captHand(1, 1);  %extracts x coord of captain's hand
+        yCaptHand = captHand(2, 1);  %extracts y coord of captain's hand
+        [xCaptPoint2, yCaptPoint2] = captTracking(xCapt, yCapt, thetaCapt, xCaptHand, yCaptHand); %rotates captain's hand appropriately at origin, stores new hand coords inside xCaptPoint2 & yCaptPoint2. Does NOT translate though, it only rotates.
+        [sniperRifleGraphics, invisibleNode, invisibleNodeNozzle] = drawSniperRifle (sizeCapt/2, thetaCapt + pi/2, xCaptPoint2, yCaptPoint2, 0, 0, false); %false as parameter gathers 2 invis sniper nodes that's all
 
 
-        % draw new capt
-        [captainGraphics, capt2, pt16, captHand, xSpearPoint, ySpearPoint] = drawCapt( xCapt, yCapt, thetaCapt, sizeCapt, moveArm, spearOff); %removes capt spear
+        %invisible node for lower right of sniper grip. This is where capt's hand will be located when holding the sniper rifle.
+        %invisNode is properly rotated and translated through drawSniperRifle
+        xInvisNode = invisibleNode(1, 1); %x-coord for this node
+        yInvisNode = invisibleNode(2, 1); %y-coord for this node
+        xArmDistFromNode = xCaptPoint2-xInvisNode;
+        yArmDistFromNode = yCaptPoint2-yInvisNode;
 
-              if (setCounter == 1); %prevents an undefined sniperRifleGraphics from being erased. sniperRifleGraphics is undefined initially bc drawSniperRifle hasn't passed yet.
-                for (i=1: length(sniperRifleGraphics)) %erases old sniper rifle
-                  set (sniperRifleGraphics(i), 'Visible', 'off');
-                endfor
-              endif
-              %captHand is captain's hand coords if capt was locted at origin with 0 degree rotation.
-              %captHand was extracted from drawCapt earlier on
-              xCaptHand = captHand(1, 1);  %extracts x coord of captain's hand
-              yCaptHand = captHand(2, 1);  %extracts y coord of captain's hand
-              [xCaptPoint2, yCaptPoint2] = captTracking(xCapt, yCapt, thetaCapt, xCaptHand, yCaptHand); %rotates captain's hand appropriately at origin, stores new hand coords inside xCaptPoint2 & yCaptPoint2. Does NOT translate though, it only rotates.
-              [sniperRifleGraphics, invisibleNode, invisibleNodeNozzle] = drawSniperRifle (sizeCapt/2, thetaCapt + pi/2, xCaptPoint2, yCaptPoint2, 0, 0, false); %false as parameter gathers 2 invis sniper nodes that's all
+        [sniperRifleGraphics, invisibleNode, invisibleNodeNozzle] = drawSniperRifle (sizeCapt/2, thetaCapt + pi/2, xCaptPoint2, yCaptPoint2, xArmDistFromNode, yArmDistFromNode, true); %true being a parameter draws sniper rifle properly rotated and translated
+        sniperNowCrafted = true;
+      elseif (sniperRifleCraft == true && cmd == 'e') %if reload is complete and 'e' is pressed
+            bulletStep = 50; %dist bullet will travel each tick
+            bulletNumber = bulletNumber + 1;
+            bulletTheta(bulletNumber) = thetaCapt;
 
-              %invisible node for lower right of sniper grip. This is where capt's hand will be located when holding the sniper rifle.
-              %invisNode is properly rotated and translated through drawSniperRifle
-              xInvisNode = invisibleNode(1, 1); %x-coord for this node
-              yInvisNode = invisibleNode(2, 1); %y-coord for this node
-              xArmDistFromNode = xCaptPoint2-xInvisNode;
-              yArmDistFromNode = yCaptPoint2-yInvisNode;
-              set(captainGraphics(12), 'Visible','off'); %turns spear invisible
-              [sniperRifleGraphics, invisibleNode, invisibleNodeNozzle] = drawSniperRifle (sizeCapt/2, thetaCapt + pi/2, xCaptPoint2, yCaptPoint2, xArmDistFromNode, yArmDistFromNode, true); %true being a parameter draws sniper rifle properly rotated and translated
-              setCounter = 1; %allows old sniper to be erased starting next tick since drawSniperRifle has passed. sniperRifleGraphics is now defined.
-              if (cmd == 'e' && reload == reloadDefault) %if reload is complete and 'e' is pressed
-                bulletStep = 50; %dist bullet will travel each tick
-
-                %invisibleNodeNozzle is initially located at the nozzle tip. The bullet will be drawn around this invisible node
-                xNozzle = invisibleNodeNozzle(1, 1); %x-coord of invisibleNodeNozzle
-                yNozzle = invisibleNodeNozzle(2, 1); %y-coord of invisibleNodeNozzle
-                [bulletGraphics, invisibleNodeNozzle] = drawBullet (sizeCapt/2, thetaCapt + pi/2, xNozzle, yNozzle); %draws bullet on first tick
-                gunTrigger = 1; %so next 'if loop' can activate
-                bulletInBounds = 1; %so next 'if loop' can activate
-                reload = reloadDefault; %reload is set to the reloading duration
-                reloadYes = 1; %indicates the reload process has begun
-              endif
-       endif
+            %invisibleNodeNozzle is initially located at the nozzle tip. The bullet will be drawn around this invisible node
+            xNozzle(bulletNumber) = invisibleNodeNozzle(1, 1); %x-coord of invisibleNodeNozzle
+            yNozzle(bulletNumber) = invisibleNodeNozzle(2, 1); %y-coord of invisibleNodeNozzle
+            [bulletGraphics(:,bulletNumber), invisibleNodeBullet(:,bulletNumber)] = drawBullet (sizeCapt/2, bulletTheta(bulletNumber) + pi/2, xNozzle(bulletNumber), yNozzle(bulletNumber)); %draws bullet on first tick
+            bulletInBounds(bulletNumber) = 1; %so next 'if loop' can activate
+            gunTrigger = 1; %so next 'if loop' can activate
+        endif
    endif
 
-   if (gunTrigger == 1 && bulletInBounds == 1) %previous 'if loop' initiates this
+
+   for (b = 1: bulletNumber)
+     if (gunTrigger == 1 && bulletInBounds(b) == 1) %previous 'if loop' initiates this
+
 
        %erase old bullet
-       for i=1:length( bulletGraphics );
-           set( bulletGraphics(i), 'Visible', 'off' );
+       for i=1:length( bulletGraphics(:,b));
+           set( bulletGraphics(i,b), 'Visible', 'off' );
        endfor
 
        %bullet is set to proper angle
-       xNozzle = xNozzle + bulletStep*cos(thetaCapt - pi/2); %x-coord of rotated invisibleNodeNozzle
-       yNozzle = yNozzle + bulletStep*sin(thetaCapt - pi/2); %y-coord of rotated invisibleNodeNozzle
+       xNozzle(b) = xNozzle(b) + bulletStep*cos(bulletTheta(b) - pi/2); %x-coord of rotated invisibleNodeNozzle
+       yNozzle(b) = yNozzle(b) + bulletStep*sin(bulletTheta(b) - pi/2); %y-coord of rotated invisibleNodeNozzle
+
 
        %draw new bullet
-       [bulletGraphics, invisibleNodeNozzle] = drawBullet (sizeCapt/2, thetaCapt + pi/2, xNozzle, yNozzle);
+       [bulletGraphics(:,b), invisibleNodeBullet(:,b)] = drawBullet (sizeCapt/2, bulletTheta(b) + pi/2, xNozzle(b), yNozzle(b));
+       xBulletNode(b) = invisibleNodeBullet(1, b);
+       yBulletNode(b) = invisibleNodeBullet(2, b);
 
-       disFromNode = sqrt((xNozzle - xCrab)^2 + (yNozzle - yCrab)^2); %gets bullet's distance from crab
+       disFromNode(b) = sqrt((xBulletNode(b) - xCrab)^2 + (yBulletNode(b) - yCrab)^2); %gets bullet's distance from crab
 
-       if (disFromNode <= sizeCrab) %if bullet hits crab
+       if (disFromNode(b) <= sizeCrab) %if bullet hits crab
+           crabHealth = crabHealth - 5
+       endif
+
+       if (crabHealth <= 0)
            you_win = true %returns in console that you win
            break;
        endif
 
        %if bullet hits map border, it dissapears and stops moving
-       if ((mapWidth < xNozzle || 0 > xNozzle) || (mapHeight < yNozzle || 0 > yNozzle) )
-         for i=1:length( bulletGraphics ); %turns bullet invisible
-           set( bulletGraphics(i), 'Visible', 'off' );
+       if ((mapWidth < xBulletNode(b) || 0 > xBulletNode(b)) || (mapHeight < yBulletNode(b) || 0 > yBulletNode(b)) )
+         for i=1:length( bulletGraphics(:,b)); %turns bullet invisible
+           set( bulletGraphics(i,b), 'Visible', 'off' );
          endfor
-         bulletInBounds = 0; %stops bullet movement
+         bulletInBounds(b) = 0; %stops bullet movement
        endif
-   endif
-
-   if (reloadYes == 1) %if sniper is still reloading
-     reload = reload - 1      %tells the console the reload time
-     if (reload == 0) %if reload duration = 0
-       reload = reloadDefault; %sets reload to reload duration
-       reloadYes = 0; %ends this entire 'nested if loop'
      endif
-   endif
+   endfor
 
-    %Small Crab Stuff
-    if (crabsCaught != numCrabs)
-          %makes crab run when near a net
-          for j=1:numCrabs
-            if (!isCrabCaught(j) && getDist(xSpearPoint,ySpearPoint,xSmallCrab(j),ySmallCrab(j)) < 7*sizeCapt) %make Crabs Run
-
-            %erase the old crab
-              for i=1:length(smallCrabGraphics(:,j))
-                delete(smallCrabGraphics(i,j));
-              endfor
-            % get the crab's new angle (pointing towards the net)
-            thetaSmallCrab(j) = getAngle(xSpearPoint, ySpearPoint, xSmallCrab(j), ySmallCrab(j));
-
-            %moves the crab backwards
-            cmd = "k";
-            [xSmallCrab(j),ySmallCrab(j),thetaSmallCrab(j)] = moveSmallCrab(cmd,xSmallCrab(j),ySmallCrab(j),thetaSmallCrab(j),mapHeight,mapWidth,sizeSmallCrab);
-            %draws new crab
-            smallCrabGraphics(:,j) = drawSmallCrab(xSmallCrab(j),ySmallCrab(j),thetaSmallCrab(j),sizeSmallCrab);
-            endif
-          endfor
-
-
-            %dissapears the crab when caught
-         for j=1:numCrabs
-           if(!isCrabCaught(j) && getDist(xSpearPoint, ySpearPoint, xSmallCrab(j), ySmallCrab(j)) < 2*sizeCapt)
-           % keeps track of the number of crabs caught
-
-            crabsCaught = crabsCaught + 1;
-
-            isCrabCaught(j)=1;
-            crabsCaught = sum(isCrabCaught);
-             % erase the old crab
-              for i=1:length(smallCrabGraphics(:,j))
-                delete(smallCrabGraphics(i,j));
-              endfor
-
-            endif
-          endfor
-    endif
 
     if (cmd == "Q" || you_win == true) %if quit, if all lives lost, or if you win
       if (cmd == "Q")
