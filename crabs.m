@@ -115,10 +115,19 @@ crabHealth = 100;
 ##while ( cmd != "Q" && j < length(healthGraphics) && you_win == false);
 
 
+  % initiates the health of the big crab
+    crabHealthLoc = [100,100];
+    crabHealthStatus = text(crabHealthLoc(1), crabHealthLoc(2), strcat('Crab Health = ', ...
+  num2str(crabHealth)), 'FontSize', 35, 'Color', 'red');
+
 while(1)
     commandwindow();  % keeps the main focus on the window
 
     cmd = kbhit(1); % Read the keyboard.
+
+    delete(crabHealthStatus);
+    crabHealthStatus = text(crabHealthLoc(1), crabHealthLoc(2), strcat('Crab Health = ', ...
+  num2str(crabHealth)), 'FontSize', 35, 'Color', 'red');
 
 if (numJelly > 0)
 % jellyfish stuff
