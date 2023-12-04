@@ -125,10 +125,6 @@ while(1)
 
     cmd = kbhit(1); % Read the keyboard.
 
-    delete(crabHealthStatus);
-    crabHealthStatus = text(crabHealthLoc(1), crabHealthLoc(2), strcat('Crab Health = ', ...
-  num2str(crabHealth)), 'FontSize', 35, 'Color', 'red');
-
 if (numJelly > 0)
 % jellyfish stuff
  for k=1:numJelly
@@ -508,6 +504,9 @@ endif
 
        if (disFromNode(b) <= sizeCrab) %if bullet hits crab
            crabHealth = crabHealth - 5
+           delete(crabHealthStatus);
+           crabHealthStatus = text(crabHealthLoc(1), crabHealthLoc(2), strcat('Crab Health = ', ...
+           num2str(crabHealth)), 'FontSize', 35, 'Color', 'red');
        endif
 
        if (crabHealth <= 0)
