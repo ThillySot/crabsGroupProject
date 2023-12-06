@@ -38,7 +38,7 @@ crabSpeedChange = .2*crabStep;
 crabStepWhen_E_Is_Pressed = crabStep - crabSpeedChange;
 eCounter = 0;
 crabStunned = 0;
-crabStunnedDuration = 300* (1/level^2)
+crabStunnedDuration = 300* (1/level^2) ;
 E_is_Pressed = false;
 
 %initialize the small crab location, heading and size
@@ -114,14 +114,16 @@ crabHealth = 100;
 %while the user doesn't quit and while the Captain has lives left
 ##while ( cmd != "Q" && j < length(healthGraphics) && you_win == false);
 
-  % gives the user an explanation what to do
-  objectiveTextLoc = [1440, 2500];
-  objectiveText = text(objectiveTextLoc(1), objectiveTextLoc(2),'Capture All The Crabs To Unlock Weapon Parts And Kill The Beast!', 'FontSize', 20, 'Color', 'red');
-
   % initiates the health of the big crab
     crabHealthLoc = [100,100];
     crabHealthStatus = text(crabHealthLoc(1), crabHealthLoc(2), strcat('Crab Health = ', ...
   num2str(crabHealth)), 'FontSize', 35, 'Color', 'red');
+
+
+  % gives the user an explanation what to do
+    objectiveTextLoc = [400, 1400];
+    objectiveText = text(objectiveTextLoc(1), objectiveTextLoc(2),'Capture All The Crabs To Unlock Weapon Parts And Kill The Beast!', 'FontSize', 20, 'Color', 'red');
+
 
 while(1)
     commandwindow();  % keeps the main focus on the window
@@ -171,8 +173,8 @@ endif
                   set( healthGraphics(i), 'Visible', 'off' );
               endfor
 
-              healthIndex = healthIndex + 6  %adds 6 to j because each life consists of 6 points
-              captWasHit = true %indicates in Command Window the captain was hit
+              healthIndex = healthIndex + 6 ; %adds 6 to j because each life consists of 6 points
+              captWasHit = true ;%indicates in Command Window the captain was hit
               invincibility = 5; %immunity frames after getting hit
             endif
         endif
@@ -183,7 +185,7 @@ endif
 
         crabStep = crabStep + crabSpeedChange; %crab goes faster
     else %if crab is stunned
-      crabStunned = crabStunned - 1 %crab stun duration goes down by 1
+      crabStunned = crabStunned - 1 ;%crab stun duration goes down by 1
     endif
 
     if (healthIndex >= 18)
@@ -191,19 +193,15 @@ endif
     endif
 
 
-##    % jellyfish sting code
-##
-##     for k=1:numJelly
-##
-##      if(getDist(xJelly(k),yJelly(k),xCapt,yCapt) < 3*sizeCapt)
-##        %healthCapt = healthCapt - jellySting;
-##
-##        % ends the game if the captain's health is at 0
-##          if (healthCapt <= 0)
-##            break
-##          endif
-##      endif
-##    endfor
+    % jellyfish sting code
+
+%     for k=1:numJelly
+%
+%      if(getDist(xJelly(k),yJelly(k),xCapt,yCapt) < 3*sizeCapt)
+%        healthIndex = healthIndex - jellySting;
+%
+%      endif
+%   endfor
 
  %=======================
 
@@ -506,14 +504,14 @@ endif
        disFromNode(b) = sqrt((xBulletNode(b) - xCrab)^2 + (yBulletNode(b) - yCrab)^2); %gets bullet's distance from crab
 
        if (disFromNode(b) <= sizeCrab) %if bullet hits crab
-           crabHealth = crabHealth - 5
+           crabHealth = crabHealth - 5 ;
            delete(crabHealthStatus);
            crabHealthStatus = text(crabHealthLoc(1), crabHealthLoc(2), strcat('Crab Health = ', ...
            num2str(crabHealth)), 'FontSize', 35, 'Color', 'red');
        endif
 
        if (crabHealth <= 0)
-           you_win = true %returns in console that you win
+           you_win = true ;%returns in console that you win
            break;
        endif
 

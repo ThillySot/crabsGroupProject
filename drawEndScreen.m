@@ -3,11 +3,11 @@ function restart = drawEndScreen(img, numCrabs, crabsCaught)
   drawMap(img);
   hold on
 
-  textHandle1 = text(1000,1000,'AH! Youve Been NIPPED! You Caught', 'FontSize', 20, 'Color', 'red');
+  textHandle1 = text(700,500,'AH! Youve Been NIPPED! You Caught', 'FontSize', 20, 'Color', 'red');
 
-  pause(1)
+  pause(4)
   delete(textHandle1)
-  textHandle2 = text(1100,1000,'would you like to play again?', 'FontSize', 14, 'Color', 'red');
+  textHandle2 = text(700,500,'would you like to play again?', 'FontSize', 20, 'Color', 'red');
 
 
     while(1)
