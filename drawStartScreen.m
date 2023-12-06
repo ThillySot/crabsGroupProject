@@ -10,12 +10,12 @@ imshow(imageName);
 
 % IMG size of START-SCREEN.png: 3980 x 2266
 % locations for text handles
-crabTextLoc = [1240, 1600];
-levelLoc = [1140, 1780];
+%crabTextLoc = [1240, 1600];
+levelLoc = [1440, 2500];
 
 % presents all the text onto the start screen
-crabText = text(crabTextLoc(1), crabTextLoc(2),'Your Ships Been Wrecked By The Crab Beast!', 'FontSize', 30, 'Color', 'red');
-levelExp = text(levelLoc(1), levelLoc(2),'Quick, Enter Your Level 1 Though 9 And Collect All Your Crabs Before Youre Nipped!', 'FontSize', 25, 'Color', 'red');
+%crabText = text(crabTextLoc(1), crabTextLoc(2),'Your Ships Been Wrecked By The Crab Beast!', 'FontSize', 30, 'Color', 'red');
+levelExp = text(levelLoc(1), levelLoc(2),'Enter Your Level, 1 Though 9!', 'FontSize', 25, 'Color', 'red');
 
 
 

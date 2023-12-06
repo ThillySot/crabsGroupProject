@@ -114,6 +114,9 @@ crabHealth = 100;
 %while the user doesn't quit and while the Captain has lives left
 ##while ( cmd != "Q" && j < length(healthGraphics) && you_win == false);
 
+  % gives the user an explanation what to do
+  objectiveTextLoc = [1440, 2500];
+  objectiveText = text(objectiveTextLoc(1), objectiveTextLoc(2),'Capture All The Crabs To Unlock Weapon Parts And Kill The Beast!', 'FontSize', 20, 'Color', 'red');
 
   % initiates the health of the big crab
     crabHealthLoc = [100,100];
@@ -567,7 +570,7 @@ endwhile
 
 %death screen
 
-restart = drawEndScreen("START-SCREEN.png", numCrabs, crabsCaught);
+restart = drawEndScreen("END-SCREEN.png", numCrabs, crabsCaught);
 
 endwhile
 
