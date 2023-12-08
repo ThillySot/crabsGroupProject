@@ -1,5 +1,4 @@
-
-function jellyHandle = drawJelly (x,y,theta,size)
+function [jellyHandle, xJellyNode, yJellyNode] = drawJelly (x,y,theta,size)
 
   jelly = getJelly(size);
 
@@ -22,6 +21,8 @@ function jellyHandle = drawJelly (x,y,theta,size)
   pt11=jelly(:,11);
   pt12=jelly(:,12);
   pt13=jelly(:,13);
+  xJellyNode = jelly(1, 14);
+  yJellyNode = jelly(2, 14);
 
   jellyHandle(1)=drawLine(pt1,pt2,'m');
   jellyHandle(2)=drawLine(pt2,pt3,'m');
@@ -36,5 +37,4 @@ function jellyHandle = drawJelly (x,y,theta,size)
   jellyHandle(11)=drawLine(pt13,pt5,'m');
   jellyHandle(12)=drawLine(pt12,pt4,'m');
 
-
-endfunction
+  endfunction

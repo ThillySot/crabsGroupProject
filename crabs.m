@@ -73,7 +73,7 @@ sniperSize = mapWidth/20;
 
 % initiates the number of jellyfish
   for k=1:numJelly
-    jellyGraphics(:,k) = drawJelly (xJelly(k), yJelly(k), thetaJelly(k), sizeJelly);
+    [jellyGraphics(:,k), xJellyNode(k), yJellyNode(k)] = drawJelly (xJelly(k), yJelly(k), thetaJelly(k), sizeJelly);
   endfor
 
 
@@ -142,10 +142,25 @@ if (numJelly > 0)
   [xJelly(k), yJelly(k), thetaJelly(k)] = moveJelly(level,xJelly(k),yJelly(k),thetaJelly(k),sizeJelly,mapWidth,mapHeight);
 
   %draw Jellyfish
-  jellyGraphics(:,k) = drawJelly(xJelly(k),yJelly(k),thetaJelly(k),sizeJelly);
+  [jellyGraphics(:,k), xJellyNode(k), yJellyNode(k)] = drawJelly(xJelly(k),yJelly(k),thetaJelly(k),sizeJelly);
 
-  endfor
-endif
+  distFromJelly(k) = sqrt(  (xJellyNode(k) - xCapt)^2 + (yJellyNode(k) - yCapt)^2  );
+  if (distFromJelly(k) <= 2*sizeJelly && invincibility < 0) %if Capt touched crab off immunity protection
+
+            if (healthIndex <= length(healthGraphics) - 6); % actiavtes if captain has lives left. otherwise, while loop ends
+
+              for i=1+healthIndex: 6+healthIndex; %for loop removes one life off the screen
+                  set( healthGraphics(i), 'Visible', 'off' );
+              endfor
+
+              healthIndex = healthIndex + 6 ; %adds 6 to j because each life consists of 6 points
+              captWasHit = true ;%indicates in Command Window the captain was hit
+              invincibility = 5; %immunity frames after getting hit
+            endif
+
+   endif
+ endfor
+ endif
 
 
 

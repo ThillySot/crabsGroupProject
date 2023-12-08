@@ -22,7 +22,9 @@ function jelly = getJelly (size)
    pt12=[-size;-size;1 ];
    pt13=[size;-size;1 ];
 
+   jellyNode = [-5*size;0;1];
 
-  jelly=[pt1,pt2,pt3,pt4,pt5,pt6,pt7,pt8,pt9,pt10,pt11,pt12,pt13];
+
+  jelly=[pt1,pt2,pt3,pt4,pt5,pt6,pt7,pt8,pt9,pt10,pt11,pt12,pt13, jellyNode];
 
 endfunction
