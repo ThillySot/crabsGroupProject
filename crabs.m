@@ -122,7 +122,10 @@ crabHealth = 100;
 
   % gives the user an explanation what to do
     objectiveTextLoc = [400, 1400];
+    objectiveTextLoc2 = [400, 1450];
     objectiveText = text(objectiveTextLoc(1), objectiveTextLoc(2),'Capture All The Crabs To Unlock Weapon Parts And Kill The Beast!', 'FontSize', 20, 'Color', 'red');
+
+    objectiveText = text(objectiveTextLoc2(1), objectiveTextLoc2(2),'Controls: W = Forward || S = Backward || A = Left Turn || D = Right Turn || E = Action Button', 'FontSize', 20, 'Color', 'red');
 
 
 while(1)

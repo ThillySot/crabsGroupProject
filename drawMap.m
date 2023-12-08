@@ -17,7 +17,7 @@ img = imread(imageName);
 imshow(imageName);
 
 %put a title on the figure
-title("Controls: W = Forward || S = Backward || A = Left Turn || D = Right Turn || E = Action Button");
+title("Crabs");
 
 
 %keep the background and plot on top of it
