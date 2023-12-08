@@ -33,7 +33,7 @@ xCrab = 250;
 yCrab = 250;
 thetaCrab = 0;
 sizeCrab = 150;
-crabStep = 1;
+crabStep = (1*level/3);
 crabSpeedChange = .2*crabStep;
 crabStepWhen_E_Is_Pressed = crabStep - crabSpeedChange;
 eCounter = 0;
@@ -248,7 +248,7 @@ if (numJelly > 0)
 
                   if (distFromSpear <= sizeCrab/2) %if crab is hit
                       crabStep = crabStepWhen_E_Is_Pressed;
-                      hit = true
+                      hit = true ;
                       crabStunned = crabStunnedDuration;
                       E_is_Pressed = true;
                   endif
