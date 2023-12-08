@@ -17,6 +17,7 @@ function restart = drawEndScreen(img, numCrabs, crabsCaught)
   pause(4)
   delete(textHandle1)
   textHandle2 = text(1600,500,'would you like to play again?', 'FontSize', 20, 'Color', 'red');
+  textHandle2 = text(1600,600,'Y = yes, N = no', 'FontSize', 20, 'Color', 'red');
 
 
     while(1)
